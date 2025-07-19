@@ -4,7 +4,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
 
@@ -14,13 +13,20 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigManager<T> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigManager.class);
+public class ConfigFileManager<T> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigFileManager.class);
 
     /**
      * Fuck Mojang, how to get the fucking runDir?
      */
-    public static final Path configFolderPath = FabricLoader.getInstance().getConfigDir();
+    public static final Path configFolderPath = FabricLoader.getInstance().getConfigDir().resolve("realms");
+
+    static {
+        File dirFile = configFolderPath.toFile();
+        if (dirFile.exists()) {
+            dirFile.mkdirs();
+        }
+    }
 
     public final Path configPath;
 
@@ -33,7 +39,7 @@ public class ConfigManager<T> {
 
     private T bean;
 
-    public ConfigManager(T type/*, boolean saveValue*/) {
+    public ConfigFileManager(T type/*, boolean saveValue*/) {
         beanClass = type.getClass();
         //lower first character
         String typeClassName = beanClass.getSimpleName();
@@ -105,4 +111,7 @@ public class ConfigManager<T> {
         return map;
     }
 
+    public String getConfigName() {
+        return configName;
+    }
 }
