@@ -4,7 +4,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.nodes.Tag;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -25,8 +27,11 @@ public class ConfigManager<T> {
     private final String configName;
 
     private final Class<?> beanClass;
-
+    /*
     Map<String, Object> config = new HashMap<>();
+    */
+
+    private T bean;
 
     public ConfigManager(T type/*, boolean saveValue*/) {
         beanClass = type.getClass();
@@ -42,12 +47,28 @@ public class ConfigManager<T> {
         File configFile = configPath.toFile();
         FileReader reader = new FileReader(configFile);
         Yaml yaml = new Yaml();
+        /*
         Map<String, Object> loadedConfig = yaml.load(reader);
         config.replaceAll((key, value) -> loadedConfig);
+
+         */
+        bean = yaml.load(reader);
     }
 
     public void save() throws IOException {
+        File configFile = configPath.toFile();
+        FileWriter writer = new FileWriter(configFile);
+        Yaml yaml = new Yaml();
+        writer.write(yaml.dumpAs(bean, Tag.MAP, null));
+        writer.close();
+    }
 
+    public T get() {
+        return bean;
+    }
+
+    public void set(T bean) {
+        this.bean = bean;
     }
 
     @SuppressWarnings("unchecked")
