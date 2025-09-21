@@ -6,6 +6,4 @@ public class Warp {
     private Position warpPosition;
 
     private String warpName;
-
-    private String
 }
