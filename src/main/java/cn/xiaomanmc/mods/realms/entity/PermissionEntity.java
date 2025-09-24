@@ -3,6 +3,7 @@ package cn.xiaomanmc.mods.realms.entity;
 import cn.xiaomanmc.mods.realms.permission.Permission;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class PermissionEntity {
     public static abstract class PermissionEntityType {
@@ -13,30 +14,19 @@ public class PermissionEntity {
 
     private final int entityType;
 
-    private final String entityName;
+    private final UUID UUID;
 
-    private final Set<Permission> permissions;
-
-    public PermissionEntity(int entityType, String entityName, Set<Permission> permissions) {
+    public PermissionEntity(int entityType, UUID UUID) {
         this.entityType = entityType;
-        this.entityName = entityName;
-        this.permissions = permissions;
-    }
-
-    public void addPermission(Permission permission) {
-        this.permissions.add(permission);
-    }
-
-    public Set<Permission> getPermissions() {
-        return permissions;
+        this.UUID = UUID;
     }
 
     public int getEntityType() {
         return entityType;
     }
 
-    public String getEntityName() {
-        return entityName;
+    public UUID getUUID() {
+        return UUID;
     }
 
 }
